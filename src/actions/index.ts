@@ -6,13 +6,35 @@ import {
     ADD_COINS,
     REMOVE_COIN,
 } from './types';
+import { Dispatch } from 'redux';
+
+// Action definition
+
+export interface GetCoinDataAction {
+    type: typeof GET_COIN_DATA;
+}
+
+export interface GetCoinPriceAction {
+    type: typeof GET_COIN_PRICE;
+    codes: string[];
+}
+
+export interface AddCoinsAction {
+    type: typeof ADD_COINS;
+    ids: string[];
+}
+
+export interface RemoveCoinAction {
+    type: typeof REMOVE_COIN;
+    id: string;
+}
 
 const FAVOURITES = [
     'BTC', 'XRP', 'LTC', 'ETH', 'XMR',
     'ZEC', 'DSH', 'GNT', 'ADA', 'XVG',
 ];
 
-export const getCoinData = () => async (dispatch) => {
+export const getCoinData = () => async (dispatch: Dispatch) => {
     try {
         const response = await axios.get('https://min-api.cryptocompare.com/data/all/coinlist');
         const { Data: coinData } = response.data;
@@ -30,7 +52,7 @@ export const getCoinData = () => async (dispatch) => {
     }
 };
 
-export const getCoinPrice = codes => async (dispatch) => {
+export const getCoinPrice = (codes: string[]) => async (dispatch: Dispatch) => {
     try {
         const url = `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${codes.join(',')}&tsyms=USD,GBP`;
         const response = await axios.get(url);
@@ -41,10 +63,10 @@ export const getCoinPrice = codes => async (dispatch) => {
     }
 };
 
-export const addCoins = ids => (dispatch) => {
+export const addCoins = (ids: string[]) => (dispatch: Dispatch) => {
     dispatch({ type: ADD_COINS, payload: ids });
 };
 
-export const removeCoin = id => (dispatch) => {
+export const removeCoin = (id: string) => (dispatch: Dispatch) => {
     dispatch({ type: REMOVE_COIN, payload: id });
 };
