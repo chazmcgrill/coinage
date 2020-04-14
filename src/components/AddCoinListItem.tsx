@@ -1,11 +1,21 @@
 import React from 'react';
 
-const AddCoinListItem = ({ data, handleAddCoinClick }) => {
+interface Data {
+    showing: boolean;
+    name: string;
+}
+
+interface AddCoinListItemProps {
+    data: Data;
+    handleAddCoinClick: () => void;
+}     
+
+const AddCoinListItem = ({ data, handleAddCoinClick }: AddCoinListItemProps) => {
     const coinStyle = data.showing ? {
         border: '3px solid lightgreen',
         color: 'lightgreen',
         background: 'white',
-    } : null;
+    } : undefined;
 
     return (
         <div

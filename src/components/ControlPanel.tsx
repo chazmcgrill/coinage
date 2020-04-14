@@ -1,12 +1,26 @@
 import React, { Component } from 'react';
 import AddCoinListItem from './AddCoinListItem';
 import './ControlPanel.sass';
+import { Coin } from '../reducers/coins';
 
-class ControlPanel extends Component {
-    constructor(props) {
+interface ControlPanelProps {
+    selectCoins: Coin[];
+    handleAddCoins: any;
+    addOpen: any;
+    toggleAddOpen: any;
+    handleCurrency: any;
+    handleRefresh: any;
+}
+
+interface ControlPanelState {
+    selectCoins: Coin[];
+}
+
+class ControlPanel extends Component<ControlPanelProps, ControlPanelState> {
+    constructor(props: ControlPanelProps) {
         super(props);
         this.state = {
-            selectCoins: null,
+            selectCoins: [],
         };
         this.handleAddSubmit = this.handleAddSubmit.bind(this);
     }
@@ -16,14 +30,14 @@ class ControlPanel extends Component {
         this.setState({ selectCoins });
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: ControlPanelProps) {
         const { selectCoins } = this.props;
         if (nextProps.selectCoins !== selectCoins) {
             this.setState({ selectCoins });
         }
     }
 
-    handleAddCoinClick(id) {
+    handleAddCoinClick(id: number) {
         const { selectCoins } = this.state;
         const newSelectCoins = selectCoins.map(c => (
             c.id === id ? { ...c, showing: !c.showing } : c
@@ -48,34 +62,6 @@ class ControlPanel extends Component {
             handleRefresh,
         } = this.props;
         const { selectCoins } = this.state;
-        const form = addOpen ? (
-            <div>
-                <h4>choose coins to add...</h4>
-                <button
-                    type="button"
-                    onClick={this.handleAddSubmit}
-                    className="add-coins-submit"
-                >
-                    Submit
-                </button>
-                <div className="add-coins">
-                    {selectCoins.map(c => (
-                        <AddCoinListItem
-                            handleAddCoinClick={() => this.handleAddCoinClick(c.id)}
-                            key={c.id}
-                            data={c}
-                        />
-                    ))}
-                </div>
-                <button
-                    type="button"
-                    onClick={this.handleAddSubmit}
-                    className="add-coins-submit"
-                >
-                    Submit
-                </button>
-            </div>
-        ) : null;
 
         return (
             <div>
@@ -90,7 +76,34 @@ class ControlPanel extends Component {
                     <button type="button" onClick={handleCurrency}>Currency</button>
                     <button type="button" onClick={handleRefresh}>Refresh</button>
                 </div>
-                {form}
+                {addOpen && (
+                    <div>
+                        <h4>choose coins to add...</h4>
+                        <button
+                            type="button"
+                            onClick={this.handleAddSubmit}
+                            className="add-coins-submit"
+                        >
+                            Submit
+                        </button>
+                        <div className="add-coins">
+                            {selectCoins.map(c => (
+                                <AddCoinListItem
+                                    handleAddCoinClick={() => this.handleAddCoinClick(c.id)}
+                                    key={c.id}
+                                    data={c}
+                                />
+                            ))}
+                        </div>
+                        <button
+                            type="button"
+                            onClick={this.handleAddSubmit}
+                            className="add-coins-submit"
+                        >
+                            Submit
+                        </button>
+                    </div>
+                )}
             </div>
         );
     }
