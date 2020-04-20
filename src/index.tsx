@@ -1,24 +1,18 @@
 import React from 'react';
-import { render } from 'react-dom';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { compose, createStore, applyMiddleware } from 'redux';
-import reduxThunk from 'redux-thunk';
-import BitcoinTracker from './components/BitcoinTracker';
+
+import { createReduxStore } from './utils/configureStore';
+import { iconLibrarySetup } from './utils/iconConfig';
+import App from './components/App';
 import './styles/main.sass';
 
-import reducers from './reducers';
+const store = createReduxStore();
+iconLibrarySetup();
 
-const composeEnhancer = (window && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
-
-const store = createStore(
-    reducers,
-    {},
-    composeEnhancer(applyMiddleware(reduxThunk)),
-);
-
-render(
+ReactDOM.render(
     <Provider store={store}>
-        <BitcoinTracker />
+        <App />
     </Provider>,
     document.getElementById('root'),
 );
