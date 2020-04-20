@@ -2,7 +2,7 @@ import React from 'react';
 import { Coin } from '../../redux/coins/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-interface CoinProps {
+interface CoinListItemProps {
     coinData: Coin;
     currDollar: boolean;
     isFavouritesView: boolean
@@ -18,11 +18,11 @@ const formatCoinPrice = (coinData: Coin, currDollar: boolean) => {
 }
 
 
-const CoinItem = ({
+const CoinListItem = ({
     coinData,
     currDollar,
     isFavouritesView,
-}: CoinProps) => {
+}: CoinListItemProps) => {
 
 
     return (
@@ -39,4 +39,4 @@ const CoinItem = ({
     );
 };
 
-export default CoinItem;
+export default CoinListItem;
