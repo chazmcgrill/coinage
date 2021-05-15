@@ -1,38 +1,47 @@
 import React from 'react';
 import CoinListItem from './CoinListItem';
-import { Coin } from '../../redux/coins/types';
 import LoadingPanel from '../ui/LoadingPanel';
+import { useQuery } from 'react-query';
+import { fetchCoinPrice } from '../api/coins';
+import useCoinDataQuery from '../hooks/useCoinDataQuery';
+import { useGlobalStateContext } from '../global-state/hooks';
 
-interface CoinListProps {
-    coinData: Coin[];
-    isCurrencyDollar: boolean;
-    loading: boolean;
-    isFavouritesView: boolean;
-}
+type CoinPriceResponse = { [key: string]: { GBP: string; USD: string } };
 
-const CoinList = ({
-    coinData,
-    isCurrencyDollar,
-    loading,
-    isFavouritesView,
-}: CoinListProps) => {
-    if (loading) return <LoadingPanel />;
+const DEFAULT_COIN_PRICE = { GBP: '0', USD: '0' };
 
-    const selectedCoins = coinData.filter(coin => coin.showing);
+const CoinList = () => {
+    const { state } = useGlobalStateContext();
+    const { activeCoinCodes } = state;
+    const { isLoading, data } = useCoinDataQuery();
+    const { isLoading: isLoadingPrice, data: priceData } = useQuery<CoinPriceResponse, Error>(['coinsPrice', activeCoinCodes], () => fetchCoinPrice(activeCoinCodes));
+
+    if (isLoading || isLoadingPrice) return <LoadingPanel />;
 
     return (
         <div className="coin-list">
-            {selectedCoins.map(coin => (
-                <CoinListItem
-                    coin={coin}
-                    isCurrencyDollar={isCurrencyDollar}
-                    key={coin.id}
-                    isFavouritesView={isFavouritesView}
-                />
-            ))}
+            {activeCoinCodes.map(coinCode => {
+                const coinData = data?.Data[coinCode];
+                if (!coinData) return null;
+                const coin = {
+                    id: coinCode,
+                    name: coinData.CoinName,
+                    imageURL: coinData.ImageUrl,
+                    code: coinCode,
+                }
+
+                return (
+                    <CoinListItem
+                        coin={coin}
+                        isCurrencyDollar={state.isCurrencyDollar}
+                        key={coin.id}
+                        coinPrice={priceData?.[coin.code] || DEFAULT_COIN_PRICE}
+                        isFavourite
+                    />
+                );
+            })}
         </div>
     );
 }
-
 
 export default CoinList;

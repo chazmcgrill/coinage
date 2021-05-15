@@ -1,34 +1,28 @@
-import React from 'react';
-import { Coin } from '../../redux/coins/types';
+import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDispatch } from 'react-redux';
-import { toggleCoinShowing } from '../../redux/coins/actions';
+import { Coin, CoinPrice } from '../api/coins';
+import { formatCoinPrice } from './utils';
+import { ActionType } from '../global-state/types';
+import { useDispatch } from '../global-state/hooks';
 
 interface CoinListItemProps {
     coin: Coin;
     isCurrencyDollar: boolean;
-    isFavouritesView: boolean;
-}
-
-const formatCoinPrice = (coin: Coin, isCurrencyDollar: boolean) => {
-    const currency = isCurrencyDollar ? 'USD' : 'GBP';
-    const currSymbol = isCurrencyDollar ? '$' : '£';
-    const price = Number(coin.price[currency]);
-    const value = price >= 1 ? price.toFixed(2) : price.toFixed(4);
-
-    return `${currSymbol}${value}`;
+    coinPrice?: CoinPrice;
+    isFavourite: boolean;
 }
 
 const CoinListItem = ({
     coin,
     isCurrencyDollar,
-    isFavouritesView,
+    coinPrice,
+    isFavourite,
 }: CoinListItemProps) => {
     const dispatch = useDispatch();
+    const coinCode = coin.code;
 
     const handleFavouriteClick = () => {
-        const action = toggleCoinShowing(coin.id);
-        dispatch(action);
+        dispatch({ type: ActionType.ToggleActiveCoinCode, payload: coinCode });
     }
 
     return (
@@ -36,17 +30,15 @@ const CoinListItem = ({
             <img src={coin.imageURL && `https://www.cryptocompare.com${coin.imageURL}`} alt={coin.name} />
             <div className="coin-code">{coin.code}</div>
             <div className="coin-name">{coin.name}</div>
-            {!isFavouritesView ? (
+            {coinPrice ? <div className="coin-price">{formatCoinPrice(coinPrice, isCurrencyDollar)}</div> : (
                 <FontAwesomeIcon
                     className="coin-star"
-                    icon={[coin.showing ? 'fas' : 'far', 'star']}
+                    icon={[isFavourite ? 'fas' : 'far', 'star']}
                     onClick={handleFavouriteClick}
                 />
-            ) : (
-                <div className="coin-price">{formatCoinPrice(coin, isCurrencyDollar)}</div>
             )}
         </div>
     );
 };
 
-export default CoinListItem;
+export default memo(CoinListItem);

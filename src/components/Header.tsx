@@ -1,16 +1,11 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-
-interface HeaderProps {
-    onRefresh: () => void;
-    loadingPrice: boolean;
-    onSelectFavourites: () => void;
-    onSelectList: () => void;
-    isFavouritesView: boolean;
-    onClickCurrency: () => void;
-    isCurrencyDollar: boolean;
-}
+import { useQuery } from 'react-query';
+import { fetchNews, NewsResult } from './api/newsFeed';
+import { fetchCoinPrice } from './api/coins';
+import { useGlobalStateContext } from './global-state/hooks';
+import { ActionType } from './global-state/types';
 
 interface ControlItemProps {
     icon: IconProp;
@@ -20,33 +15,43 @@ interface ControlItemProps {
     active?: boolean;
 }
 
-const ControlItem = ({ icon, text, onClick, iconSpin, active }: ControlItemProps) => (
+const ControlItem = memo(({ icon, text, onClick, iconSpin, active }: ControlItemProps) => (
     <div className={`control-item ${active ? 'active' : ''}`} onClick={onClick}>
         <FontAwesomeIcon icon={icon} spin={iconSpin} />
         {text && <p className="control-item-text">{text}</p>}
     </div>
-);
+));
 
-const Header = ({
-    onRefresh,
-    loadingPrice,
-    onSelectFavourites,
-    onSelectList,
-    isFavouritesView,
-    onClickCurrency,
-    isCurrencyDollar
-}: HeaderProps): JSX.Element => (
-    <div className="header">
-        <h1>coinage</h1>
+const Header = (): JSX.Element => {
+    const { state, dispatch } = useGlobalStateContext();
+    const { isLoading: isLoadingPrice, refetch: refetchCoinPrice } = useQuery<{}, Error>('coinsPrice', () => fetchCoinPrice(state.activeCoinCodes), { enabled: false });
+    const { refetch: refetchNews } = useQuery<NewsResult, Error>('news', fetchNews, { enabled: false });
 
-        <div className="controls">
-            <ControlItem icon="star" active={isFavouritesView} text="Favourites" onClick={onSelectFavourites} />
-            <ControlItem icon="list" active={!isFavouritesView} text="Full List" onClick={onSelectList} />
-            <ControlItem icon={isCurrencyDollar ? 'pound-sign' : 'dollar-sign'} onClick={onClickCurrency} />
-            <ControlItem icon="sync" onClick={onRefresh} iconSpin={loadingPrice} />
-            {/* <ControlItem icon="cog" onClick={onClickSettings} /> */}
+    const handleToggleFavourites = useCallback(() => {
+        dispatch({ type: ActionType.ToggleIsFavourites });
+    }, [dispatch]);
+
+    const handleToggleIsDollar = useCallback(() => {
+        dispatch({ type: ActionType.ToggleCurrencyDollar });
+    }, [dispatch]);
+
+    const handleRefresh = useCallback(() => {
+        refetchCoinPrice();
+        refetchNews();
+    }, [refetchCoinPrice, refetchNews])
+
+    return (
+        <div className="header">
+            <h1>coinage</h1>
+
+            <div className="controls">
+                <ControlItem icon="star" active={state.isFavouritesView} text="Favourites" onClick={handleToggleFavourites} />
+                <ControlItem icon="list" active={!state.isFavouritesView} text="Full List" onClick={handleToggleFavourites} />
+                <ControlItem icon={state.isCurrencyDollar ? 'pound-sign' : 'dollar-sign'} onClick={handleToggleIsDollar} />
+                <ControlItem icon="sync" onClick={handleRefresh} iconSpin={isLoadingPrice} />
+            </div>
         </div>
-    </div>
-);
+    );
+}
 
-export default Header;
+export default memo(Header);
