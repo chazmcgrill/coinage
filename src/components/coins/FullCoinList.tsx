@@ -33,6 +33,6 @@ const FullCoinList = () => {
             />
         </div>
     );
-}
+};
 
 export default FullCoinList;
