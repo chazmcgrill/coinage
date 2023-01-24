@@ -1,3 +1,4 @@
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClientProvider, QueryClient } from 'react-query';
 import { iconLibrarySetup } from './utils/iconConfig';
@@ -9,7 +10,8 @@ const queryClient = new QueryClient();
 iconLibrarySetup();
 
 const container = document.getElementById('root');
-const root = createRoot(container!);
+const root = createRoot(container as HTMLElement);
+
 root.render(
     <QueryClientProvider client={queryClient}>
         <GlobalStateProvider>
