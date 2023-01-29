@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createPaginationArray } from './utils';
 
@@ -15,9 +15,13 @@ const Ellipses = () => (
 );
 
 const PageNumber = ({ page, onPageClick, active }: { page: number; onPageClick: (page: number) => void; active: boolean }) => (
-    <div className={`pagination-button${active ? '_active' : ''}`} onClick={() => onPageClick(page - 1)}>
+    <button
+        aria-label={active ? 'selected page' : `select page ${page}`}
+        className={`button-no-style pagination-button${active ? '_active' : ''}`}
+        onClick={() => onPageClick(page - 1)}
+    >
         <span>{page}</span>
-    </div>
+    </button>
 );
 
 const PaginationControl = ({ currentPageIndex, totalPages, onChangePage }: PaginationControlProps): JSX.Element => {
@@ -26,7 +30,9 @@ const PaginationControl = ({ currentPageIndex, totalPages, onChangePage }: Pagin
     return (
         <div className="pagination">
             {currentPageIndex > 0 && (
-                <FontAwesomeIcon icon="long-arrow-alt-left" className="pagination-icon" onClick={() => onChangePage(currentPageIndex - 1)} />
+                <button className="button-no-style" aria-label="navigate to previous page" onClick={() => onChangePage(currentPageIndex - 1)}>
+                    <FontAwesomeIcon icon="long-arrow-alt-left" className="pagination-icon" />
+                </button>
             )}
 
             {pages.map((page, index) => (
@@ -36,7 +42,9 @@ const PaginationControl = ({ currentPageIndex, totalPages, onChangePage }: Pagin
             ))}
 
             {currentPageIndex < totalPages - 1 && (
-                <FontAwesomeIcon icon="long-arrow-alt-right" className="pagination-icon" onClick={() => onChangePage(currentPageIndex + 1)} />
+                <button className="button-no-style" aria-label="navigate to next page" onClick={() => onChangePage(currentPageIndex + 1)}>
+                    <FontAwesomeIcon icon="long-arrow-alt-right" className="pagination-icon" />
+                </button>
             )}
         </div>
     );
