@@ -1,11 +1,12 @@
-import React, { memo } from 'react';
-import LoadingPanel from '../ui/LoadingPanel';
+import { memo } from 'react';
+import LoadingPanel from '../../../components/ui/LoadingPanel';
 import NewsItem from './NewsItem';
 import { useQuery } from 'react-query';
-import { fetchNews, NewsResult } from '../api/newsFeed';
+import { NewsResult } from '../types/NewsResult';
+import { getNews } from '../api/getNews';
 
 const NewsFeed = (): JSX.Element => {
-    const { isLoading, data } = useQuery<NewsResult, Error>('news', fetchNews);
+    const { isLoading, data } = useQuery<NewsResult, Error>('news', getNews);
 
     if (isLoading) return <LoadingPanel />;
 
