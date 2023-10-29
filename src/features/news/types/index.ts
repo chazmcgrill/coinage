@@ -7,3 +7,7 @@ export interface NewsArticle {
     body: string;
     tags: string;
 }
+
+export interface NewsResult {
+    Data: NewsArticle[];
+}

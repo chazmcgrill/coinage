@@ -1,20 +1,18 @@
-import CoinListItem from './CoinListItem';
-import LoadingPanel from '../../../components/ui/LoadingPanel';
 import { useQuery } from 'react-query';
+import { useAtom } from 'jotai';
+import { favouriteCoinCodesDerivedAtom } from '@/store/global';
+import LoadingPanel from '@/components/ui/LoadingPanel';
+import CoinListItem from '../components/CoinListItem';
 import { fetchCoinPrice } from '../api/coins';
 import useCoinDataQuery from '../hooks/useCoinDataQuery';
-import { useAtom } from 'jotai';
-import { favouriteCoinCodesDerivedAtom } from '../../../store/global';
-import { CoinPriceResponse } from '../types/CoinPriceResponse';
+import queryKeys from '@/config/query-keys';
 
 const DEFAULT_COIN_PRICE = { GBP: '0', USD: '0' };
 
-const CoinList = () => {
+export const CoinList = () => {
     const [activeCoinCodes] = useAtom(favouriteCoinCodesDerivedAtom);
     const { isLoading, data } = useCoinDataQuery();
-    const { isLoading: isLoadingPrice, data: priceData } = useQuery<CoinPriceResponse, Error>(['coinsPrice', activeCoinCodes], () =>
-        fetchCoinPrice(activeCoinCodes),
-    );
+    const { isLoading: isLoadingPrice, data: priceData } = useQuery([queryKeys.coinPrices, activeCoinCodes], () => fetchCoinPrice(activeCoinCodes));
 
     if (isLoading || isLoadingPrice) return <LoadingPanel />;
 
@@ -35,5 +33,3 @@ const CoinList = () => {
         </div>
     );
 };
-
-export default CoinList;

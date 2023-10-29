@@ -1,12 +1,12 @@
-import { memo } from 'react';
-import LoadingPanel from '../../../components/ui/LoadingPanel';
-import NewsItem from './NewsItem';
 import { useQuery } from 'react-query';
-import { NewsResult } from '../types/NewsResult';
+import LoadingPanel from '@/components/ui/LoadingPanel';
+import NewsItem from '../components/NewsItem';
+import { NewsResult } from '../types';
 import { getNews } from '../api/getNews';
+import queryKeys from '@/config/query-keys';
 
-const NewsFeed = (): JSX.Element => {
-    const { isLoading, data } = useQuery<NewsResult, Error>('news', getNews);
+export const NewsFeed = (): JSX.Element => {
+    const { isLoading, data } = useQuery<NewsResult, Error>(queryKeys.news, getNews);
 
     if (isLoading) return <LoadingPanel />;
 
@@ -19,5 +19,3 @@ const NewsFeed = (): JSX.Element => {
         </div>
     );
 };
-
-export default memo(NewsFeed);
