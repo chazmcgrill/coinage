@@ -1,4 +1,4 @@
-import { createPaginationArray } from './utils';
+import { createPaginationArray } from './createPaginationArray';
 
 describe('createPaginationArray', () => {
     it('should return an array of length 7 when totalPages is less than 8', () => {
