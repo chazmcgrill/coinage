@@ -1,11 +1,11 @@
-import LoadingPanel from '../ui/LoadingPanel';
-import useCoinDataQuery from '../hooks/useCoinDataQuery';
-import PaginatedList from '../ui/pagination/PaginatedList';
-import CoinListItem from './CoinListItem';
 import { useAtom } from 'jotai';
-import { favouriteCoinCodesDerivedAtom } from '../../store/global';
+import { favouriteCoinCodesDerivedAtom } from '@/store/global';
+import LoadingPanel from '@/components/ui/LoadingPanel';
+import PaginatedList from '@/components/ui/pagination/PaginatedList';
+import useCoinDataQuery from '../hooks/useCoinDataQuery';
+import CoinListItem from '../components/CoinListItem';
 
-const FullCoinList = () => {
+export const FullCoinList = () => {
     const { isLoading, data } = useCoinDataQuery();
     const [activeCoinCodes] = useAtom(favouriteCoinCodesDerivedAtom);
 
@@ -27,5 +27,3 @@ const FullCoinList = () => {
         </div>
     );
 };
-
-export default FullCoinList;

@@ -1,12 +1,11 @@
 import { useAtom } from 'jotai';
-import Header from './Header';
-import CoinList from './coins/CoinList';
-import Footer from './Footer';
-import NewsFeed from './news/NewsFeed';
-import FullCoinList from './coins/FullCoinList';
-import { isFavouritesViewAtom } from '../store/global';
+import { isFavouritesViewAtom } from '@/store/global';
+import { CoinList, FullCoinList } from '@/features/coin-list';
+import { NewsFeed } from '@/features/news';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-const App = () => {
+const IndexPage = () => {
     const [isFavouritesView] = useAtom(isFavouritesViewAtom);
 
     return (
@@ -25,4 +24,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default IndexPage;

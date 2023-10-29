@@ -1,5 +1,5 @@
-import React, { memo } from 'react';
-import { NewsArticle } from '../api/newsFeed';
+import { memo } from 'react';
+import { NewsArticle } from '../types';
 
 interface NewsItemProps {
     article: NewsArticle;
