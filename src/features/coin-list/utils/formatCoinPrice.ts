@@ -1,4 +1,4 @@
-import { CoinPrice } from '../api/coins';
+import { CoinPrice } from '../types/CoinPrice';
 
 /**
  * Formats coin price object for human readability

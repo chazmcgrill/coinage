@@ -1,9 +1,9 @@
-import LoadingPanel from '../ui/LoadingPanel';
+import LoadingPanel from '../../../components/ui/LoadingPanel';
 import useCoinDataQuery from '../hooks/useCoinDataQuery';
-import PaginatedList from '../ui/pagination/PaginatedList';
+import PaginatedList from '../../../components/ui/pagination/PaginatedList';
 import CoinListItem from './CoinListItem';
 import { useAtom } from 'jotai';
-import { favouriteCoinCodesDerivedAtom } from '../../store/global';
+import { favouriteCoinCodesDerivedAtom } from '../../../store/global';
 
 const FullCoinList = () => {
     const { isLoading, data } = useCoinDataQuery();

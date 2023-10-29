@@ -1,5 +1,5 @@
 import { it, describe } from 'vitest';
-import { formatCoinPrice } from './utils';
+import { formatCoinPrice } from './formatCoinPrice';
 
 describe('formatCoinPrice util', () => {
     const coinPrice = { USD: '9.99', GBP: '6.66' };

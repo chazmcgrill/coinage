@@ -1,10 +1,11 @@
 import CoinListItem from './CoinListItem';
-import LoadingPanel from '../ui/LoadingPanel';
+import LoadingPanel from '../../../components/ui/LoadingPanel';
 import { useQuery } from 'react-query';
-import { CoinPriceResponse, fetchCoinPrice } from '../api/coins';
+import { fetchCoinPrice } from '../api/coins';
 import useCoinDataQuery from '../hooks/useCoinDataQuery';
 import { useAtom } from 'jotai';
-import { favouriteCoinCodesDerivedAtom } from '../../store/global';
+import { favouriteCoinCodesDerivedAtom } from '../../../store/global';
+import { CoinPriceResponse } from '../types/CoinPriceResponse';
 
 const DEFAULT_COIN_PRICE = { GBP: '0', USD: '0' };
 

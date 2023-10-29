@@ -1,9 +1,9 @@
 import { describe, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Coin } from '../api/coins';
 import CoinListItem from './CoinListItem';
-import { TestProvider } from '../../test/StoreTestProviders';
-import { isCurrencyDollarAtom } from '../../store/global';
+import { TestProvider } from '../../../test/StoreTestProviders';
+import { isCurrencyDollarAtom } from '../../../store/global';
+import { Coin } from '../types/Coin';
 
 const coin = {
     id: 'BTC',
