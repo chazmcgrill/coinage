@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { isCurrencyDollarAtom, isFavouritesViewAtom } from '@/store/global';
 import queryKeys from '@/config/query-keys';
+import useTheme, { ThemeMode } from '@/hooks/useTheme';
 
 interface ControlItemProps {
     icon: IconProp;
@@ -31,6 +32,7 @@ ControlItem.displayName = 'ControlItem';
 const Header = (): JSX.Element => {
     const [isFavouritesView, setIsFavouritesView] = useAtom(isFavouritesViewAtom);
     const [isCurrencyDollar, setIsCurrencyDollar] = useAtom(isCurrencyDollarAtom);
+    const { themeMode, handleToggleThemeMode } = useTheme();
 
     const queryClient = useQueryClient();
     const isFetchingCount = useIsFetching({ queryKey: queryKeys.coinPrices });
@@ -56,6 +58,7 @@ const Header = (): JSX.Element => {
                 <ControlItem icon="star" active={isFavouritesView} text="Favourites" onClick={handleToggleFavourites} testIdPrefix="favourites" />
                 <ControlItem icon="list" active={!isFavouritesView} text="Full List" onClick={handleToggleFavourites} testIdPrefix="full-list" />
                 <ControlItem icon={isCurrencyDollar ? 'pound-sign' : 'dollar-sign'} onClick={handleToggleIsDollar} />
+                <ControlItem icon={themeMode === ThemeMode.Light ? 'sun' : 'moon'} onClick={handleToggleThemeMode} />
                 <ControlItem icon="sync" onClick={handleRefresh} iconSpin={isLoadingPrices} />
             </div>
         </div>
